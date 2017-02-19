@@ -27,10 +27,10 @@ class Session:
     def genAuth(self):
         if self.uid is None:
             self.uid = str(random.randint(1, 10000000000))
-            digest = hashlib.md5(
-                b''.join(str(i).encode() for i in (
-                    self.uid, self.netid, self.studentid))
-            ).hexdigest()
+        digest = hashlib.md5(
+            b''.join(str(i).encode() for i in (
+                self.uid, self.netid, self.studentid))
+        ).hexdigest()
         return {
             'ds': digest,
             'sid': self.netid,
