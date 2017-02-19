@@ -19,11 +19,10 @@ def root():
 def channels():
     out = io.StringIO()
     out.write('#EXTM3U\n')
-    data = session.fetch(action='qtnow').json()
-    assert data['result'] == 'OK'
-    print('Got', len(data['payload']), 'channels')
+    channels = session.fetch(action='qtnow')['payload']
+    print('Got', len(channels), 'channels')
     hls_root = urljoin(request.url_root, '/hls/')
-    for channel in data['payload']:
+    for channel in channels:
         out.write('#EXTINF:-1 tvg-id="%s" tvg-name="%s",%s\n' % (
             channel['guideid'], channel['channame'].strip().replace(' ', '_'),
             channel['channame'].strip()

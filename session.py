@@ -64,7 +64,12 @@ class Session:
             headers=h, **kwargs)
         if not r.ok:
             r.raise_for_status()
-        return r
+        if not asJson:
+            return r
+        json = r.json()
+        if json['result'] != 'OK':
+            raise IOError('Got result %s for fetch of action %s', (json['result'], action))
+        return json
 
     def get(self, url, **kwargs):
         return self.session.get(url, **kwargs)
@@ -81,8 +86,7 @@ class Session:
             self._init = True
         self.token = None
         self.organization = None
-        response = self.fetch(action='verifycreds', login=False).json()
-        assert response['result'] == 'OK'
+        response = self.fetch(action='verifycreds', login=False)
         self.organization = response['orgName']
         self.token = response['token']
         self._logged_in = True
