@@ -4,7 +4,7 @@ import argparse
 import io
 from urllib.parse import quote, unquote, urljoin
 
-from flask import Flask, request
+from flask import Flask, request, Response
 from session import Session
 app = Flask(__name__)
 session = Session()
@@ -30,7 +30,7 @@ def channels():
         ))
         out.write(urljoin(hls_root, quote(channel['hlsurl'], safe='')))
         out.write('\n')
-    return out.getvalue()
+    return Response(out.getvalue(), mimetype='application/x-mpegurl')
 
 
 @app.route('/hls/<path:url>')
@@ -38,7 +38,9 @@ def hls(url):
     url = unquote(url)
     print('Accessing HLS', url)
     hls = session.get(url)
-    return hls.text.replace('/video/', 'https://tv.byu.edu/video/')
+    return Response(
+        hls.text.replace('/video/', 'https://tv.byu.edu/video/'),
+        mimetype='application/x-mpegurl')
 
 
 def main():
