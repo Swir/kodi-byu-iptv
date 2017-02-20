@@ -21,10 +21,4 @@ On Debian/Ubuntu, you may need to install the `kodi-pvr-iptvsimple` package firs
 
 In the settings for the plugin, change the M3U Play List URL to
 `http://localhost:9090/channels` (or a different port if configured).
-
-
-Planned Features:
-
- - Basic EPG (Electronic Program Guide) support
- - Show descriptions and start times
- - Channel Logos
+Change the EPG URL to `http://localhost:9090/epg`.
