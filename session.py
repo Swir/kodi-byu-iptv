@@ -14,6 +14,7 @@ class Session:
     _init = False
     _logged_in = False
     _BASE_URL = 'https://tv.byu.edu/'
+    _TIMEOUT = 5
 
     def __init__(self):
         self.session = CacheControl(requests.Session())
@@ -61,7 +62,7 @@ class Session:
             h.update(headers)
         r = self.session.request(
             method, self._BASE_URL + 'cgi-bin/remote.cgi',
-            headers=h, **kwargs)
+            headers=h, timeout=self._TIMEOUT, **kwargs)
         if not r.ok:
             r.raise_for_status()
         if not asJson:
@@ -72,7 +73,7 @@ class Session:
         return json
 
     def get(self, url, **kwargs):
-        return self.session.get(url, **kwargs)
+        return self.session.get(url, timeout=self._TIMEOUT, **kwargs)
 
     def set_login(self, netid, studentid):
         self.netid = netid
